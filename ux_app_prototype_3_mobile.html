@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>EmotiSync – Combined Watch & App</title>
+  <style>
+    :root {
+      --primary: #4a90e2;
+      --bg:      #f5f7fa;
+      --card:    #fff;
+      --text:    #333;
+      --muted:   #777;
+      --radius:  12px;
+      --shadow:  0 4px 10px rgba(0,0,0,0.05);
+      --icon:    20px;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      background: var(--bg);
+      font-family: 'Segoe UI', sans-serif;
+      color: var(--text);
+      padding: 20px;
+    }
+    .intro {
+      text-align: center;
+      margin-bottom: 24px;
+    }
+    .intro h2 {
+      font-size: 24px;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    .intro p {
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .main-view {
+      display: flex;
+      gap: 32px;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    /* ========== WATCH UI ========== */
+    .watch-container {
+      background: #111;
+      color: #fff;
+      border-radius: 24px;
+      width: 180px;
+      height: 300px;
+      padding: 16px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.5);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .watch-datetime { font-size: 12px; color: #ccc; }
+    .watch-time     { font-size: 28px; margin: 4px 0 12px; }
+    .metric {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 4px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.1);
+      font-size: 14px;
+    }
+    .metric:last-child { border-bottom: none; }
+    .metric .label { color: #ccc; }
+    .metric .icon  { font-size: 18px; }
+    .metric .value { font-weight: bold; }
+    .heart  .icon { color: #e74c3c; }
+    .breath .icon { color: #3498db; }
+    .stress .icon{ color: #f1c40f; }
+
+    /* ========== MOBILE APP UI ========== */
+    .phone {
+      background: var(--bg);
+      border: 1px solid #ccc;
+      border-radius: 36px;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      width: 320px;
+      height: 600px;
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+    header {
+      background: var(--primary);
+      color: #fff;
+      padding: 12px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    header h1 { font-size: 18px; }
+    header nav button {
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: var(--icon);
+      margin-left: 12px;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: var(--radius);
+      transition: background 0.2s;
+    }
+    header nav button.active,
+    header nav button:hover {
+      background: rgba(255,255,255,0.2);
+    }
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 12px;
+    }
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .card {
+      background: var(--card);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 16px;
+      margin-bottom: 16px;
+      text-align: left;
+    }
+
+    /* -- Calendar -- */
+    .calendar-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 8px;
+    }
+    .calendar-header button {
+      background: var(--primary);
+      color: #fff;
+      border: none;
+      padding: 6px 10px;
+      border-radius: var(--radius);
+      cursor: pointer;
+      font-size: 14px;
+    }
+    .calendar-header .label {
+      font-size: 16px; font-weight: bold;
+    }
+    .weekdays {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      margin-bottom: 4px;
+    }
+    .weekdays div {
+      text-align: center; font-size: 12px; color: var(--muted); font-weight: 600;
+    }
+    .calendar {
+      display: grid;
+      grid-template-columns: repeat(7, 1fr);
+      grid-auto-rows: 50px;
+      gap: 4px;
+    }
+    .cell {
+      background: #e3edfa;
+      border-radius: var(--radius);
+      position: relative;
+      display: flex; justify-content: center; align-items: center;
+      cursor: pointer;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .cell.disabled {
+      background: transparent; cursor: default; box-shadow: none;
+    }
+    .cell:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .cell .date { position: absolute; top: 4px; left: 4px; font-size: 10px; color: var(--muted); }
+    .cell .emoji{ font-size: 18px; }
+
+    /* -- Choice -- */
+    .choice-card button {
+      width: 48%; margin: 8px 1%; padding: 8px 0;
+      background: var(--primary); color: #fff; border: none; border-radius: var(--radius);
+      font-size: var(--icon); cursor: pointer;
+    }
+    .choice-card button:hover { background: #3a78c2; }
+
+    /* -- Charts with gradients -- */
+    .chart { margin-bottom: 12px; }
+    .chart-title {
+      font-size: 12px; color: var(--muted); margin-bottom: 6px;
+    }
+    .chart-img {
+      width: 100%; height: 120px; background: var(--card);
+      border-radius: var(--radius); box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+    /* heart-rate gradient */
+    .chart-img svg .area-hr { fill: url(#gradHR); }
+    .chart-img svg .line-hr { stroke: #e74c3c; }
+    /* stress gradient */
+    .chart-img svg .area-st { fill: url(#gradST); }
+    .chart-img svg .line-st { stroke: #f1c40f; }
+
+    /* -- Weekly Summary Table -- */
+    table.summary {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      text-align: center;
+      font-size: 12px;
+    }
+    table.summary th, table.summary td {
+      border: 1px solid #ddd;
+      padding: 6px;
+    }
+    table.summary th {
+      background: #e8f1fc;
+      color: var(--muted);
+    }
+
+    /* -- Self-Report -- */
+    .emoji-options { text-align: center; margin-bottom: 12px; }
+    .emoji-options span {
+      font-size: 28px; margin: 0 6px; cursor: pointer;
+      opacity: 0.6; transition: transform 0.2s, opacity 0.2s;
+    }
+    .emoji-options span.selected {
+      transform: scale(1.2); opacity: 1;
+    }
+    textarea {
+      width: 100%; padding: 8px; border-radius: var(--radius);
+      border: 1px solid #ccc; font-size: 14px; resize: vertical;
+      margin-bottom: 12px;
+    }
+    .save-btn {
+      background: var(--primary); color: #fff; border: none;
+      padding: 8px 16px; border-radius: var(--radius); cursor: pointer;
+      display: block; margin: 0 auto; font-size: 14px;
+    }
+    .save-btn:hover { background: #3a78c2; }
+
+    /* -- Notifications & Privacy -- */
+    .settings-item { margin-bottom: 12px; }
+    .settings-item label {
+      display: flex; align-items: center; font-size: 13px; margin-bottom: 6px;
+    }
+    .settings-item span.icon {
+      font-size: 16px; margin-right: 8px;
+    }
+    footer {
+      font-size: 11px; color: var(--muted); text-align: center; padding: 8px 0;
+    }
+    footer a { color: var(--primary); text-decoration: none; }
+  </style>
+</head>
+<body>
+
+  <div class="intro">
+    <h2>EmotiSync</h2>
+    <p>Minimal-intervention emotion tracker with single-tap logging.<br>
+       Built for privacy-sensitive users.</p>
+  </div>
+
+  <div class="main-view">
+
+    <!-- WATCH UI -->
+    <div class="watch-container">
+      <div class="watch-datetime">Tuesday, Jul 8</div>
+      <div class="watch-time">09:42 AM</div>
+      <div class="metric heart">
+        <div class="label">Heart Rate</div>
+        <div class="icon">❤️</div>
+        <div class="value">76 bpm</div>
+      </div>
+      <div class="metric breath">
+        <div class="label">Breathing</div>
+        <div class="icon">🌬️</div>
+        <div class="value">16 rpm</div>
+      </div>
+      <div class="metric stress">
+        <div class="label">Stress</div>
+        <div class="icon">😌</div>
+        <div class="value">Low</div>
+      </div>
+    </div>
+
+    <!-- MOBILE APP -->
+    <div class="phone">
+      <header>
+        <h1>EmotiSync</h1>
+        <nav>
+          <button class="active"    onclick="switchScreen('calendar')">📅</button>
+          <button               onclick="switchScreen('details')">📊</button>
+          <button               onclick="switchScreen('selfreport')">✏️</button>
+          <button               onclick="switchScreen('settings')">⚙️</button>
+        </nav>
+      </header>
+      <main>
+        <!-- Calendar -->
+        <section id="calendar" class="screen active">
+          <div class="card">
+            <div class="calendar-header">
+              <button id="prev-month">‹</button>
+              <div class="label" id="month-year"></div>
+              <button id="next-month">›</button>
+            </div>
+            <div class="weekdays">
+              <div>Sun</div><div>Mon</div><div>Tue</div>
+              <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
+            </div>
+            <div id="calendar-grid" class="calendar"></div>
+          </div>
+        </section>
+
+        <!-- Choice -->
+        <section id="choice" class="screen">
+          <div class="card choice-card">
+            <h2>Select for <span id="choice-date">—</span></h2>
+            <button onclick="goToDetails()">📊</button>
+            <button onclick="goToReport()">✏️</button>
+          </div>
+        </section>
+
+        <!-- Details + Weekly Summary -->
+        <section id="details" class="screen">
+          <div class="card">
+            <h2 id="details-date">—</h2>
+
+            <!-- Heart Rate Chart -->
+            <div class="chart">
+              <div class="chart-title">Heart Rate (06:00–22:00)</div>
+              <div class="chart-img">
+                <svg viewBox="0 0 300 200">
+                  <defs>
+                    <linearGradient id="gradHR" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.6"/>
+                      <stop offset="100%" stop-color="#e74c3c" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <polygon class="area-hr" points="0,150 50,120 100,130 150,100 200,110 250,80 300,90 300,200 0,200"/>
+                  <polyline class="line-hr" fill="none" stroke-width="3"
+                    points="0,150 50,120 100,130 150,100 200,110 250,80 300,90"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Stress Chart -->
+            <div class="chart">
+              <div class="chart-title">Stress (06:00–22:00)</div>
+              <div class="chart-img">
+                <svg viewBox="0 0 300 200">
+                  <defs>
+                    <linearGradient id="gradST" x1="0%" y1="0%" x2="0%" y2="100%">
+                      <stop offset="0%" stop-color="#f1c40f" stop-opacity="0.6"/>
+                      <stop offset="100%" stop-color="#f1c40f" stop-opacity="0"/>
+                    </linearGradient>
+                  </defs>
+                  <polygon class="area-st" points="0,100 50,110 100,90 150,95 200,80 250,85 300,75 300,200 0,200"/>
+                  <polyline class="line-st" fill="none" stroke-width="3"
+                    points="0,100 50,110 100,90 150,95 200,80 250,85 300,75"/>
+                </svg>
+              </div>
+            </div>
+
+            <!-- Weekly Summary Table -->
+            <table class="summary">
+              <thead>
+                <tr><th>Emotion</th><th>Count (last 7 days)</th></tr>
+              </thead>
+              <tbody>
+                <tr><td>😀</td><td>3</td></tr>
+                <tr><td>🙂</td><td>2</td></tr>
+                <tr><td>😐</td><td>1</td></tr>
+                <tr><td>😔</td><td>1</td></tr>
+                <tr><td>😢</td><td>0</td></tr>
+              </tbody>
+            </table>
+
+            <p><strong>Inferred:</strong> <span id="inferred-emoji">😀</span></p>
+            <p><strong>Self:</strong>    <span id="self-emoji">—</span></p>
+            <p><strong>Notes:</strong>   <span id="self-text">—</span></p>
+          </div>
+        </section>
+
+        <!-- Self-Report -->
+        <section id="selfreport" class="screen">
+          <div class="card">
+            <h2>Report <span id="report-date">—</span></h2>
+            <div class="emoji-options" id="report-emojis">
+              <span>😃</span><span>🙂</span><span>😐</span>
+              <span>😔</span><span>😢</span>
+            </div>
+            <textarea id="report-text" rows="3" placeholder="Your notes..."></textarea>
+            <button class="save-btn" onclick="submitReport()">Save</button>
+          </div>
+        </section>
+
+        <!-- Notifications & Privacy -->
+        <section id="settings" class="screen">
+          <div class="card">
+            <h2>Notifications &amp; Privacy</h2>
+            <div class="settings-item">
+              <label><span class="icon">🔄</span>
+                <input type="radio" name="alert" value="multiple" checked>
+                Multiple updates per day
+              </label>
+              <label><span class="icon">📆</span>
+                <input type="radio" name="alert" value="daily">
+                Update once a day
+              </label>
+              <label><span class="icon">⚠️</span>
+                <input type="radio" name="alert" value="significant">
+                Update if anything significant
+              </label>
+            </div>
+            <div class="settings-item">
+              <label><span class="icon">🔒</span>
+                <input type="checkbox" id="pin-lock">
+                Enable PIN lock
+              </label>
+            </div>
+            <div class="settings-item">
+              <label><span class="icon">💾</span>
+                <input type="checkbox" id="local-storage" checked disabled>
+                Store data locally (encrypted)
+              </label>
+            </div>
+            <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+          </div>
+        </section>
+      </main>
+      <footer>
+        🔒 Your emotion data is strictly confidential and encrypted on your device. 
+        <a href="#">Learn more</a>.
+      </footer>
+    </div>
+
+  </div>
+
+  <script>
+    let currentMonth = new Date().getMonth(),
+        currentYear  = new Date().getFullYear(),
+        choiceDate   = null;
+
+    document.getElementById('prev-month').onclick = () => changeMonth(-1);
+    document.getElementById('next-month').onclick = () => changeMonth(1);
+
+    function switchScreen(id) {
+      document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('header nav button').forEach(b => b.classList.remove('active'));
+      document.getElementById(id).classList.add('active');
+      document.querySelector(`header nav button[onclick*="${id}"]`).classList.add('active');
+      if (id === 'selfreport' && choiceDate) updateReportDate(choiceDate);
+    }
+
+    function changeMonth(offset) {
+      currentMonth += offset;
+      if (currentMonth < 0)      { currentMonth = 11; currentYear--; }
+      else if (currentMonth > 11) { currentMonth = 0; currentYear++; }
+      document.getElementById('month-year').textContent =
+        new Date(currentYear, currentMonth)
+          .toLocaleString('default',{month:'short',year:'numeric'});
+      generateCalendar(currentMonth, currentYear);
+    }
+
+    function generateCalendar(month, year) {
+      const grid = document.getElementById('calendar-grid');
+      grid.innerHTML = '';
+      const firstDay = new Date(year, month, 1).getDay();
+      for (let i=0; i<firstDay; i++) {
+        const blank = document.createElement('div');
+        blank.className = 'cell disabled';
+        grid.appendChild(blank);
+      }
+      const days = new Date(year, month+1, 0).getDate();
+      for (let d=1; d<=days; d++) {
+        const cell = document.createElement('div');
+        cell.className = 'cell';
+        const dateStr = `${year}-${String(month+1).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+        cell.dataset.date = dateStr;
+        cell.innerHTML = `<div class="date">${d}</div>
+                          <div class="emoji">${['😀','🙂','😐','😔','😢'][Math.floor(Math.random()*5)]}</div>`;
+        cell.onclick = () => {
+          choiceDate = dateStr;
+          document.getElementById('choice-date').textContent = new Date(dateStr).toDateString();
+          switchScreen('choice');
+        };
+        grid.appendChild(cell);
+      }
+    }
+
+    function goToDetails() {
+      document.getElementById('details-date').textContent = new Date(choiceDate).toDateString();
+      document.getElementById('inferred-emoji').textContent =
+        ['😀','🙂','😐','😔','😢'][Math.floor(Math.random()*5)];
+      document.getElementById('self-emoji').textContent = '—';
+      document.getElementById('self-text').textContent = 'No notes';
+      switchScreen('details');
+    }
+
+    function goToReport() {
+      updateReportDate(choiceDate);
+      switchScreen('selfreport');
+    }
+
+    function updateReportDate(date) {
+      document.getElementById('report-date').textContent = new Date(date).toDateString();
+      document.querySelectorAll('#report-emojis span').forEach(s => s.classList.remove('selected'));
+      document.getElementById('report-text').value = '';
+    }
+
+    document.querySelectorAll('#report-emojis span').forEach(span => {
+      span.onclick = () => {
+        document.querySelectorAll('#report-emojis span').forEach(s => s.classList.remove('selected'));
+        span.classList.add('selected');
+      };
+    });
+
+    function submitReport() {
+      const text  = document.getElementById('report-text').value || 'No notes';
+      const emoji = document.querySelector('#report-emojis span.selected')?.textContent || '—';
+      document.getElementById('self-emoji').textContent = emoji;
+      document.getElementById('self-text').textContent = text;
+      switchScreen('details');
+    }
+
+    function saveSettings() {
+      alert('Your settings have been saved securely.');
+    }
+
+    window.onload = () => changeMonth(0);
+  </script>
+</body>
+</html>

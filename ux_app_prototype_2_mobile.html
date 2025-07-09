@@ -1,0 +1,1277 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Collaborative Intelligence Platform - Low Fidelity Prototype</title>
+    <style>
+        /* Basic reset for consistent rendering */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            color: #333;
+            line-height: 1.4;
+        }
+
+        /* Simple container styling */
+        .prototype-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Basic header styling */
+        .prototype-header {
+            text-align: center;
+            margin-bottom: 30px;
+            background: white;
+            padding: 20px;
+            border: 2px solid #ddd;
+        }
+
+        .prototype-header h1 {
+            color: #333;
+            font-size: 2em;
+            margin-bottom: 10px;
+        }
+
+        .prototype-header p {
+            color: #666;
+            font-size: 1em;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        /* Device container layout */
+        .devices-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        /* Simple wearable device styling */
+        .wearable-device {
+            background: #333;
+            color: white;
+            width: 250px;
+            height: 250px;
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            border: 3px solid #666;
+        }
+
+        .wearable-device h3 {
+            position: absolute;
+            top: 15px;
+            font-size: 12px;
+            color: #aaa;
+        }
+
+        .emotion-display {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+
+        .emotion-emoji {
+            font-size: 3em;
+            margin-bottom: 8px;
+            display: block;
+        }
+
+        .emotion-label {
+            font-size: 1em;
+            color: #ddd;
+            margin-bottom: 4px;
+        }
+
+        .confidence-level {
+            font-size: 0.8em;
+            color: #aaa;
+        }
+
+        /* Simple button styling */
+        .wearable-actions {
+            display: flex;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .btn {
+            padding: 6px 12px;
+            border: 1px solid #666;
+            background: #555;
+            color: white;
+            font-size: 0.8em;
+            cursor: pointer;
+        }
+
+        .btn:hover {
+            background: #666;
+        }
+
+        .btn-confirm {
+            background: #4a4a4a;
+            border-color: #666;
+        }
+
+        .btn-adjust {
+            background: #4a4a4a;
+            border-color: #666;
+        }
+
+        /* Simple mobile device styling */
+        .mobile-device {
+            width: 320px;
+            background: white;
+            border: 2px solid #333;
+            overflow: hidden;
+        }
+
+        .mobile-header {
+            background: #666;
+            color: white;
+            padding: 15px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+        }
+
+        .mobile-header h2 {
+            font-size: 1.2em;
+            margin-bottom: 4px;
+        }
+
+        .mobile-header .date {
+            font-size: 0.8em;
+        }
+
+        .mobile-content {
+            padding: 15px;
+            display: none;
+        }
+
+        .mobile-content.active {
+            display: block;
+        }
+
+        /* Simple status display */
+        .current-status {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .current-status .emotion-large {
+            font-size: 2.5em;
+            margin-bottom: 8px;
+        }
+
+        .current-status .status-text {
+            font-size: 1em;
+            color: #333;
+            margin-bottom: 6px;
+        }
+
+        .current-status .ai-info {
+            font-size: 0.8em;
+            color: #666;
+            margin-bottom: 4px;
+        }
+
+        /* Simple biometrics display */
+        .biometrics {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .biometrics h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .biometrics-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            font-size: 0.8em;
+        }
+
+        /* Simple learning progress */
+        .learning-progress {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin-bottom: 15px;
+        }
+
+        .learning-progress h4 {
+            color: #333;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+        }
+
+        .progress-bar {
+            background: #ddd;
+            height: 6px;
+            margin-bottom: 6px;
+            border: 1px solid #ccc;
+        }
+
+        .progress-fill {
+            background: #666;
+            height: 100%;
+            transition: width 0.3s ease;
+        }
+
+        .progress-text {
+            font-size: 0.8em;
+            color: #666;
+        }
+
+        /* Simple calendar styling */
+        .calendar-container {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+
+        .calendar-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .calendar-nav {
+            background: #666;
+            color: white;
+            border: none;
+            padding: 4px 8px;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .calendar-nav:hover {
+            background: #555;
+        }
+
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 2px;
+            margin-bottom: 15px;
+        }
+
+        .calendar-day-header {
+            text-align: center;
+            font-size: 0.7em;
+            font-weight: bold;
+            padding: 4px;
+            background: #eee;
+            border: 1px solid #ddd;
+        }
+
+        .calendar-day {
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.7em;
+            border: 1px solid #ddd;
+            background: white;
+            cursor: pointer;
+            position: relative;
+        }
+
+        .calendar-day:hover {
+            background: #f0f0f0;
+        }
+
+        .calendar-day.today {
+            background: #e0e0e0;
+            border: 2px solid #666;
+        }
+
+        .calendar-day.has-emotion {
+            background: #f0f8ff;
+        }
+
+        .calendar-day .day-number {
+            font-size: 0.8em;
+            margin-bottom: 2px;
+        }
+
+        .calendar-day .day-emoji {
+            font-size: 1.2em;
+        }
+
+        .calendar-day.empty {
+            background: #f9f9f9;
+            border: 1px solid #eee;
+        }
+
+        /* Simple trends styling */
+        .trends-container {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 15px;
+        }
+
+        .trends-section {
+            margin-bottom: 20px;
+            padding: 12px;
+            background: white;
+            border: 1px solid #ddd;
+        }
+
+        .trends-section h4 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 0.9em;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 4px;
+        }
+
+        .stat-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            font-size: 0.8em;
+        }
+
+        .pattern-item {
+            margin-bottom: 8px;
+            padding: 6px;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            font-size: 0.8em;
+        }
+
+        .pattern-title {
+            font-weight: bold;
+            margin-bottom: 2px;
+        }
+
+        /* Simple emotion modal */
+        .emotion-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .emotion-modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border: 2px solid #333;
+            padding: 20px;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+        }
+
+        .modal-content h3 {
+            margin-bottom: 15px;
+            color: #333;
+        }
+
+        .emotion-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .emotion-option {
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            padding: 10px;
+            cursor: pointer;
+            text-align: center;
+        }
+
+        .emotion-option:hover {
+            background: #eee;
+        }
+
+        .emotion-option.selected {
+            background: #d0d0d0;
+            border: 2px solid #666;
+        }
+
+        .emotion-option .emoji {
+            font-size: 1.5em;
+            margin-bottom: 4px;
+        }
+
+        .emotion-option .label {
+            font-size: 0.7em;
+            color: #666;
+        }
+
+        /* Simple navigation */
+        .mobile-nav {
+            background: #f0f0f0;
+            padding: 8px;
+            display: flex;
+            justify-content: space-around;
+            border-top: 1px solid #ddd;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 6px 10px;
+            cursor: pointer;
+            color: #666;
+            background: #f5f5f5;
+            border: 1px solid #ddd;
+            flex: 1;
+            margin: 0 2px;
+        }
+
+        .nav-item.active {
+            background: #ddd;
+            color: #333;
+            border: 1px solid #666;
+        }
+
+        .nav-item:hover {
+            background: #e0e0e0;
+        }
+
+        .nav-icon {
+            font-size: 1em;
+            margin-bottom: 2px;
+        }
+
+        .nav-label {
+            font-size: 0.7em;
+        }
+
+        /* Simple modal buttons */
+        .modal-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+
+        .btn-primary {
+            background: #666;
+            color: white;
+            padding: 8px 16px;
+            border: 1px solid #333;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .btn-primary:hover {
+            background: #555;
+        }
+
+        .btn-secondary {
+            background: #999;
+            color: white;
+            padding: 8px 16px;
+            border: 1px solid #666;
+            cursor: pointer;
+            font-size: 0.8em;
+        }
+
+        .btn-secondary:hover {
+            background: #888;
+        }
+
+        /* Simple connection status */
+        .connection-status {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 8px;
+            font-size: 0.7em;
+        }
+
+        .status-dot {
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .status-connected {
+            background: #4a4a4a;
+        }
+
+        .status-disconnected {
+            background: #999;
+        }
+
+        /* Responsive adjustments */
+        @media (max-width: 768px) {
+            .devices-container {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .wearable-device {
+                width: 200px;
+                height: 200px;
+            }
+            
+            .mobile-device {
+                width: 300px;
+            }
+        }
+
+        /* Simple insights section */
+        .insights-section {
+            background: white;
+            border: 2px solid #ddd;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .insights-section h3 {
+            color: #333;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            border-bottom: 1px solid #ddd;
+            padding-bottom: 5px;
+        }
+
+        .insight-item {
+            background: #f9f9f9;
+            border: 1px solid #ddd;
+            padding: 12px;
+            margin-bottom: 10px;
+        }
+
+        .insight-title {
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 4px;
+            font-size: 0.9em;
+        }
+
+        .insight-description {
+            color: #666;
+            font-size: 0.8em;
+            line-height: 1.3;
+        }
+    </style>
+</head>
+<body>
+    <div class="prototype-container">
+        <!-- Simple header -->
+        <div class="prototype-header">
+            <h1>Collaborative Intelligence Platform</h1>
+            <p>This prototype shows how AI and human intelligence work together for emotion tracking. 
+               The system suggests emotions based on biometric data, and you can confirm or correct them 
+               to help the AI learn your unique patterns.</p>
+        </div>
+
+        <!-- Device interfaces -->
+        <div class="devices-container">
+            <!-- Wearable Device -->
+            <div class="wearable-device">
+                <h3>Wearable Device</h3>
+                <div class="emotion-display">
+                    <span class="emotion-emoji" id="wearable-emoji">😊</span>
+                    <div class="emotion-label">Detected: <span id="wearable-emotion">Happy</span></div>
+                    <div class="confidence-level">Confidence: <span id="wearable-confidence">85</span>%</div>
+                </div>
+                <div class="wearable-actions">
+                    <button class="btn btn-confirm" onclick="confirmEmotion(true)">Correct</button>
+                    <button class="btn btn-adjust" onclick="showEmotionModal()">Adjust</button>
+                </div>
+                <div class="connection-status">
+                    <div class="status-dot status-connected"></div>
+                    <span>Connected</span>
+                </div>
+            </div>
+
+            <!-- Mobile App -->
+            <div class="mobile-device">
+                <div class="mobile-header">
+                    <h2>EmotiSync</h2>
+                    <div class="date" id="current-date">January 9, 2025</div>
+                </div>
+                
+                <!-- Dashboard View -->
+                <div class="mobile-content active" id="dashboard-view">
+                    <div class="current-status">
+                        <div class="emotion-large" id="mobile-emoji">😊</div>
+                        <div class="status-text">Currently feeling <span id="mobile-emotion">Happy</span></div>
+                        <div class="ai-info">AI Confidence: <span id="mobile-confidence">85</span>%</div>
+                        <div class="ai-info">Learning Accuracy: <span id="learning-accuracy">78</span>%</div>
+                    </div>
+
+                    <div class="biometrics">
+                        <h4>Current Biometrics</h4>
+                        <div class="biometrics-grid">
+                            <div>Heart Rate: <span id="heart-rate">72</span> bpm</div>
+                            <div>Skin: 2.1 μS</div>
+                            <div>Temp: 98.2°F</div>
+                            <div>Activity: Light</div>
+                        </div>
+                    </div>
+
+                    <div class="learning-progress">
+                        <h4>AI Learning Progress</h4>
+                        <div class="progress-bar">
+                            <div class="progress-fill" id="progress-bar" style="width: 67%;"></div>
+                        </div>
+                        <div class="progress-text">
+                            <span id="progress-percentage">67</span>% - Getting better at understanding your emotions
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Calendar View -->
+                <div class="mobile-content" id="calendar-view">
+                    <div class="calendar-container">
+                        <div class="calendar-header">
+                            <button class="calendar-nav" onclick="navigateCalendar(-1)">←</button>
+                            <h4 id="calendar-month">January 2025</h4>
+                            <button class="calendar-nav" onclick="navigateCalendar(1)">→</button>
+                        </div>
+                        
+                        <div class="calendar-grid" id="calendar-grid">
+                            <!-- Calendar headers and days will be populated by JavaScript -->
+                        </div>
+                        
+                        <div id="selected-day-info">
+                            <h4>Selected Day Information</h4>
+                            <div id="day-details">Select a day to see emotion data</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Trends View -->
+                <div class="mobile-content" id="trends-view">
+                    <div class="trends-container">
+                        <div class="trends-section">
+                            <h4>AI Learning Performance</h4>
+                            <div class="stat-row">
+                                <span>Prediction Accuracy:</span>
+                                <span id="trend-accuracy">78%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Total Corrections:</span>
+                                <span id="trend-corrections">5</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Learning Progress:</span>
+                                <span id="trend-progress">67%</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Weekly Improvement:</span>
+                                <span>+12%</span>
+                            </div>
+                        </div>
+
+                        <div class="trends-section">
+                            <h4>Discovered Patterns</h4>
+                            <div class="pattern-item">
+                                <div class="pattern-title">Peak Happiness</div>
+                                <div>2-4 PM daily, 87% confidence</div>
+                            </div>
+                            <div class="pattern-item">
+                                <div class="pattern-title">Monday Anxiety</div>
+                                <div>9-11 AM, recurring pattern</div>
+                            </div>
+                            <div class="pattern-item">
+                                <div class="pattern-title">Exercise Correlation</div>
+                                <div>40% mood improvement post-workout</div>
+                            </div>
+                        </div>
+
+                        <div class="trends-section">
+                            <h4>Emotion Frequency (This Week)</h4>
+                            <div class="stat-row">
+                                <span>😊 Happy:</span>
+                                <span>4 days</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>😌 Calm:</span>
+                                <span>2 days</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>😰 Anxious:</span>
+                                <span>1 day</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>🤔 Thoughtful:</span>
+                                <span>1 day</span>
+                            </div>
+                        </div>
+
+                        <div class="trends-section">
+                            <h4>Biometric Insights</h4>
+                            <div class="stat-row">
+                                <span>Average Heart Rate:</span>
+                                <span>72 bpm</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Stress Level:</span>
+                                <span>Low</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Recovery Time:</span>
+                                <span>12 minutes</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Settings View -->
+                <div class="mobile-content" id="settings-view">
+                    <div class="trends-container">
+                        <div class="trends-section">
+                            <h4>Notifications</h4>
+                            <div class="stat-row">
+                                <span>Daily Reminders:</span>
+                                <span>Enabled</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Pattern Alerts:</span>
+                                <span>Enabled</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Learning Updates:</span>
+                                <span>Disabled</span>
+                            </div>
+                        </div>
+
+                        <div class="trends-section">
+                            <h4>Privacy Settings</h4>
+                            <div class="stat-row">
+                                <span>Local Processing:</span>
+                                <span>Enabled</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Data Sharing:</span>
+                                <span>Disabled</span>
+                            </div>
+                            <div class="stat-row">
+                                <span>Auto Backup:</span>
+                                <span>Enabled</span>
+                            </div>
+                        </div>
+
+                        <div class="trends-section">
+                            <h4>Data Management</h4>
+                            <div class="pattern-item">
+                                <div class="pattern-title">Export Data</div>
+                                <div>Download your emotion data</div>
+                            </div>
+                            <div class="pattern-item">
+                                <div class="pattern-title">Reset Learning</div>
+                                <div>Clear AI learning progress</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Navigation -->
+                <div class="mobile-nav">
+                    <div class="nav-item active" onclick="showView('dashboard')">
+                        <div class="nav-icon">📊</div>
+                        <div class="nav-label">Today</div>
+                    </div>
+                    <div class="nav-item" onclick="showView('calendar')">
+                        <div class="nav-icon">📅</div>
+                        <div class="nav-label">Calendar</div>
+                    </div>
+                    <div class="nav-item" onclick="showView('trends')">
+                        <div class="nav-icon">📈</div>
+                        <div class="nav-label">Trends</div>
+                    </div>
+                    <div class="nav-item" onclick="showView('settings')">
+                        <div class="nav-icon">⚙️</div>
+                        <div class="nav-label">Settings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Emotion adjustment modal -->
+        <div class="emotion-modal" id="emotion-modal">
+            <div class="modal-content">
+                <h3>How do you actually feel?</h3>
+                <div class="emotion-grid">
+                    <div class="emotion-option" onclick="selectEmotion('😊', 'Happy')">
+                        <div class="emoji">😊</div>
+                        <div class="label">Happy</div>
+                    </div>
+                    <div class="emotion-option" onclick="selectEmotion('😔', 'Sad')">
+                        <div class="emoji">😔</div>
+                        <div class="label">Sad</div>
+                    </div>
+                    <div class="emotion-option" onclick="selectEmotion('😰', 'Anxious')">
+                        <div class="emoji">😰</div>
+                        <div class="label">Anxious</div>
+                    </div>
+                    <div class="emotion-option" onclick="selectEmotion('😠', 'Angry')">
+                        <div class="emoji">😠</div>
+                        <div class="label">Angry</div>
+                    </div>
+                    <div class="emotion-option" onclick="selectEmotion('😴', 'Tired')">
+                        <div class="emoji">😴</div>
+                        <div class="label">Tired</div>
+                    </div>
+                    <div class="emotion-option" onclick="selectEmotion('🤔', 'Thoughtful')">
+                        <div class="emoji">🤔</div>
+                        <div class="label">Thoughtful</div>
+                    </div>
+                    <div class="emotion-option" onclick="selectEmotion('😌', 'Calm')">
+                        <div class="emoji">😌</div>
+                        <div class="label">Calm</div>
+                    </div>
+                    <div class="emotion-option" onclick="selectEmotion('🙃', 'Confused')">
+                        <div class="emoji">🙃</div>
+                        <div class="label">Confused</div>
+                    </div>
+                </div>
+                <div class="modal-actions">
+                    <button class="btn-primary" onclick="applyEmotionCorrection()">Apply Correction</button>
+                    <button class="btn-secondary" onclick="closeEmotionModal()">Cancel</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Simple insights explanation -->
+        <div class="insights-section">
+            <h3>How Collaborative Intelligence Works</h3>
+            <div class="insight-item">
+                <div class="insight-title">AI Suggests Emotions</div>
+                <div class="insight-description">
+                    The system analyzes your biometric data (heart rate, skin conductance, etc.) to predict your emotional state 
+                    and provides a confidence level for each prediction.
+                </div>
+            </div>
+            <div class="insight-item">
+                <div class="insight-title">You Confirm or Correct</div>
+                <div class="insight-description">
+                    When the AI is right, click "Correct" to reinforce the learning. When it's wrong, click "Adjust" 
+                    to select your actual emotion and help the system learn your unique patterns.
+                </div>
+            </div>
+            <div class="insight-item">
+                <div class="insight-title">System Learns and Improves</div>
+                <div class="insight-description">
+                    Your corrections help the AI understand your personal emotional indicators better, leading to more 
+                    accurate predictions over time. The learning progress is tracked and displayed.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Application state - this holds all the data that changes as users interact
+        let currentState = {
+            emotion: { emoji: '😊', label: 'Happy' },
+            confidence: 85,
+            heartRate: 72,
+            learningProgress: 67,
+            learningAccuracy: 78,
+            totalPredictions: 23,
+            corrections: 5,
+            selectedEmotion: null,
+            currentView: 'dashboard',
+            currentMonth: new Date(2025, 0, 1), // January 2025
+            selectedDate: null
+        };
+
+        // Sample emotion data for the calendar - this simulates historical tracking
+        const emotionData = {
+            '2025-01-01': { emotion: '😊', label: 'Happy', confidence: 85, note: 'Great start to the year' },
+            '2025-01-02': { emotion: '😔', label: 'Sad', confidence: 78, note: 'Feeling down' },
+            '2025-01-03': { emotion: '😰', label: 'Anxious', confidence: 92, note: 'Presentation anxiety' },
+            '2025-01-04': { emotion: '😊', label: 'Happy', confidence: 80, note: 'Presentation went well' },
+            '2025-01-05': { emotion: '😌', label: 'Calm', confidence: 75, note: 'Relaxing weekend' },
+            '2025-01-06': { emotion: '😊', label: 'Happy', confidence: 88, note: 'Good mood' },
+            '2025-01-07': { emotion: '😴', label: 'Tired', confidence: 71, note: 'Long work day' },
+            '2025-01-08': { emotion: '🤔', label: 'Thoughtful', confidence: 65, note: 'Planning ahead' },
+            '2025-01-09': { emotion: '😊', label: 'Happy', confidence: 85, note: 'Current mood' },
+            '2025-01-10': { emotion: '😌', label: 'Calm', confidence: 90, note: 'Peaceful evening' }
+        };
+
+        // Available emotions for selection
+        const emotions = [
+            { emoji: '😊', label: 'Happy' },
+            { emoji: '😔', label: 'Sad' },
+            { emoji: '😰', label: 'Anxious' },
+            { emoji: '😠', label: 'Angry' },
+            { emoji: '😴', label: 'Tired' },
+            { emoji: '🤔', label: 'Thoughtful' },
+            { emoji: '😌', label: 'Calm' },
+            { emoji: '🙃', label: 'Confused' }
+        ];
+
+        // Initialize the application when page loads
+        function initializeApp() {
+            // Set current date display
+            const dateElement = document.getElementById('current-date');
+            const currentDate = new Date().toLocaleDateString('en-US', { 
+                year: 'numeric', 
+                month: 'long', 
+                day: 'numeric' 
+            });
+            dateElement.textContent = currentDate;
+
+            // Update all displays with current state
+            updateDisplay();
+            
+            // Build the calendar for the current month
+            buildCalendar();
+            
+            // Start simulating real-time data updates
+            simulateRealTimeData();
+        }
+
+        // Update all display elements with current state
+        function updateDisplay() {
+            // Update wearable interface elements
+            document.getElementById('wearable-emoji').textContent = currentState.emotion.emoji;
+            document.getElementById('wearable-emotion').textContent = currentState.emotion.label;
+            document.getElementById('wearable-confidence').textContent = currentState.confidence;
+
+            // Update mobile interface elements
+            document.getElementById('mobile-emoji').textContent = currentState.emotion.emoji;
+            document.getElementById('mobile-emotion').textContent = currentState.emotion.label;
+            document.getElementById('mobile-confidence').textContent = currentState.confidence;
+            document.getElementById('learning-accuracy').textContent = currentState.learningAccuracy;
+            document.getElementById('heart-rate').textContent = currentState.heartRate;
+            document.getElementById('progress-percentage').textContent = currentState.learningProgress;
+            document.getElementById('progress-bar').style.width = currentState.learningProgress + '%';
+
+            // Update trends view with current statistics
+            document.getElementById('trend-accuracy').textContent = currentState.learningAccuracy + '%';
+            document.getElementById('trend-corrections').textContent = currentState.corrections;
+            document.getElementById('trend-progress').textContent = currentState.learningProgress + '%';
+        }
+
+        // Handle view switching in the mobile interface
+        function showView(viewName) {
+            // Hide all content views
+            document.querySelectorAll('.mobile-content').forEach(content => {
+                content.classList.remove('active');
+            });
+            
+            // Remove active class from all nav items
+            document.querySelectorAll('.nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show the selected view
+            document.getElementById(viewName + '-view').classList.add('active');
+            
+            // Mark the corresponding nav item as active
+            event.target.closest('.nav-item').classList.add('active');
+            
+            // Update current view in state
+            currentState.currentView = viewName;
+            
+            // If switching to calendar, rebuild it to ensure it's current
+            if (viewName === 'calendar') {
+                buildCalendar();
+            }
+        }
+
+        // Build the calendar display for the current month
+        function buildCalendar() {
+            const year = currentState.currentMonth.getFullYear();
+            const month = currentState.currentMonth.getMonth();
+            
+            // Update the month display header
+            const monthNames = ['January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'];
+            document.getElementById('calendar-month').textContent = monthNames[month] + ' ' + year;
+            
+            // Calculate calendar layout information
+            const firstDay = new Date(year, month, 1);
+            const lastDay = new Date(year, month + 1, 0);
+            const daysInMonth = lastDay.getDate();
+            const startingDayOfWeek = firstDay.getDay();
+            
+            // Get the main calendar grid container
+            const calendarGrid = document.getElementById('calendar-grid');
+            calendarGrid.innerHTML = '';
+            
+            // Add day headers first
+            const dayHeaders = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+            dayHeaders.forEach(dayName => {
+                const headerElement = document.createElement('div');
+                headerElement.className = 'calendar-day-header';
+                headerElement.textContent = dayName;
+                calendarGrid.appendChild(headerElement);
+            });
+            
+            // Add empty cells for days before the first day of the month
+            for (let i = 0; i < startingDayOfWeek; i++) {
+                const emptyDay = document.createElement('div');
+                emptyDay.className = 'calendar-day empty';
+                calendarGrid.appendChild(emptyDay);
+            }
+            
+            // Add cells for each day of the month
+            for (let day = 1; day <= daysInMonth; day++) {
+                const dayElement = document.createElement('div');
+                dayElement.className = 'calendar-day';
+                
+                // Format the date key to match our emotion data
+                const dateKey = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                
+                // Check if this day has emotion data
+                const dayData = emotionData[dateKey];
+                if (dayData) {
+                    dayElement.classList.add('has-emotion');
+                }
+                
+                // Check if this is today's date
+                const today = new Date();
+                if (year === today.getFullYear() && month === today.getMonth() && day === today.getDate()) {
+                    dayElement.classList.add('today');
+                }
+                
+                // Create the day number element
+                const dayNumber = document.createElement('div');
+                dayNumber.className = 'day-number';
+                dayNumber.textContent = day;
+                dayElement.appendChild(dayNumber);
+                
+                // Add emotion emoji if available
+                if (dayData) {
+                    const dayEmoji = document.createElement('div');
+                    dayEmoji.className = 'day-emoji';
+                    dayEmoji.textContent = dayData.emotion;
+                    dayElement.appendChild(dayEmoji);
+                }
+                
+                // Add click handler to show day details
+                dayElement.addEventListener('click', () => showDayDetails(dateKey, day));
+                
+                calendarGrid.appendChild(dayElement);
+            }
+        }
+
+        // Show details for a selected calendar day
+        function showDayDetails(dateKey, day) {
+            const dayData = emotionData[dateKey];
+            const detailsContainer = document.getElementById('day-details');
+            
+            if (dayData) {
+                // Display emotion data for the selected day
+                detailsContainer.innerHTML = `
+                    <div style="margin-bottom: 8px;">
+                        <strong>${dayData.emotion} ${dayData.label}</strong>
+                    </div>
+                    <div style="margin-bottom: 4px; font-size: 0.8em;">
+                        Confidence: ${dayData.confidence}%
+                    </div>
+                    <div style="font-size: 0.8em; color: #666;">
+                        Note: ${dayData.note}
+                    </div>
+                `;
+            } else {
+                // Show message for days without emotion data
+                detailsContainer.innerHTML = `
+                    <div style="color: #666; font-size: 0.8em;">
+                        No emotion data recorded for day ${day}
+                    </div>
+                `;
+            }
+        }
+
+        // Navigate to different months in the calendar
+        function navigateCalendar(direction) {
+            // Calculate the new month
+            const newMonth = new Date(currentState.currentMonth);
+            newMonth.setMonth(newMonth.getMonth() + direction);
+            
+            // Update the current month in state
+            currentState.currentMonth = newMonth;
+            
+            // Rebuild the calendar with the new month
+            buildCalendar();
+            
+            // Clear any selected day details
+            document.getElementById('day-details').innerHTML = 'Select a day to see emotion data';
+        }
+
+        // Handle emotion confirmation (when AI is correct)
+        function confirmEmotion(wasCorrect) {
+            currentState.totalPredictions++;
+            
+            if (wasCorrect) {
+                // Improve learning metrics when AI is correct
+                currentState.learningProgress = Math.min(currentState.learningProgress + 3, 100);
+                currentState.learningAccuracy = Math.min(currentState.learningAccuracy + 2, 100);
+                
+                // Show positive feedback
+                showFeedback('Good! The AI correctly identified your emotion.', 'success');
+            }
+            
+            // Update displays and simulate getting new emotion after delay
+            updateDisplay();
+            setTimeout(simulateNewEmotion, 2000);
+        }
+
+        // Show the emotion adjustment modal
+        function showEmotionModal() {
+            document.getElementById('emotion-modal').classList.add('active');
+            // Clear any previous selections
+            document.querySelectorAll('.emotion-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+        }
+
+        // Close the emotion adjustment modal
+        function closeEmotionModal() {
+            document.getElementById('emotion-modal').classList.remove('active');
+            currentState.selectedEmotion = null;
+        }
+
+        // Handle emotion selection in the modal
+        function selectEmotion(emoji, label) {
+            // Clear previous selections
+            document.querySelectorAll('.emotion-option').forEach(option => {
+                option.classList.remove('selected');
+            });
+            
+            // Mark the clicked option as selected
+            event.target.closest('.emotion-option').classList.add('selected');
+            
+            // Store the selected emotion
+            currentState.selectedEmotion = { emoji, label };
+        }
+
+        // Apply the user's emotion correction
+        function applyEmotionCorrection() {
+            if (!currentState.selectedEmotion) {
+                alert('Please select an emotion first.');
+                return;
+            }
+
+            // Record this as a correction
+            currentState.corrections++;
+            currentState.totalPredictions++;
+            
+            // Update current emotion to user's selection
+            currentState.emotion = currentState.selectedEmotion;
+            
+            // Small improvement from user feedback
+            currentState.learningProgress = Math.min(currentState.learningProgress + 1, 100);
+            
+            // Recalculate accuracy based on corrections
+            currentState.learningAccuracy = Math.round(
+                ((currentState.totalPredictions - currentState.corrections) / currentState.totalPredictions) * 100
+            );
+            
+            // Show feedback about the correction
+            showFeedback(`Thanks! You've helped the AI learn that this feeling is "${currentState.emotion.label}".`, 'correction');
+            
+            // Update displays, close modal, and simulate new emotion
+            updateDisplay();
+            closeEmotionModal();
+            setTimeout(simulateNewEmotion, 3000);
+        }
+
+        // Simulate AI generating a new emotion prediction
+        function simulateNewEmotion() {
+            // Randomly select new emotion
+            const randomEmotion = emotions[Math.floor(Math.random() * emotions.length)];
+            currentState.emotion = randomEmotion;
+            
+            // Generate confidence level (usually higher for learned emotions)
+            currentState.confidence = Math.floor(Math.random() * 40) + 60;
+            
+            // Update displays with new prediction
+            updateDisplay();
+        }
+
+        // Show feedback messages to user
+        function showFeedback(message, type) {
+            const feedback = document.createElement('div');
+            feedback.style.cssText = `
+                position: fixed;
+                top: 20px;
+                right: 20px;
+                background: ${type === 'success' ? '#4a4a4a' : '#666'};
+                color: white;
+                padding: 12px 16px;
+                border: 1px solid #333;
+                max-width: 300px;
+                font-size: 0.8em;
+                z-index: 1001;
+            `;
+            feedback.textContent = message;
+            
+            document.body.appendChild(feedback);
+            
+            // Remove feedback after 4 seconds
+            setTimeout(() => {
+                if (document.body.contains(feedback)) {
+                    document.body.removeChild(feedback);
+                }
+            }, 4000);
+        }
+
+        // Simulate real-time biometric data changes
+        function simulateRealTimeData() {
+            setInterval(() => {
+                // Simulate heart rate variations
+                currentState.heartRate = Math.floor(Math.random() * 20) + 65;
+                
+                // Update heart rate display
+                document.getElementById('heart-rate').textContent = currentState.heartRate;
+                
+                // Occasionally change confidence level
+                if (Math.random() < 0.3) {
+                    currentState.confidence = Math.floor(Math.random() * 30) + 70;
+                    document.getElementById('wearable-confidence').textContent = currentState.confidence;
+                    document.getElementById('mobile-confidence').textContent = currentState.confidence;
+                }
+            }, 3000);
+        }
+
+        // Initialize when page loads
+        window.addEventListener('load', initializeApp);
+
+        // Handle clicking outside modal to close it
+        document.getElementById('emotion-modal').addEventListener('click', function(event) {
+            if (event.target === this) {
+                closeEmotionModal();
+            }
+        });
+    </script>
+</body>
+</html>
