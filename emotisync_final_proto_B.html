@@ -288,155 +288,180 @@
 
     <!-- MOBILE APP -->
     <div class="phone">
-      <header>
-        <h1>EmotiSync</h1>
-        <nav>
-          <button class="active"    onclick="switchScreen('calendar')">📅</button>
-          <button               onclick="switchScreen('details')">📊</button>
-          <button               onclick="switchScreen('selfreport')">✏️</button>
-          <button               onclick="switchScreen('settings')">⚙️</button>
-        </nav>
+      <header style="justify-content: center; display: flex; align-items: center;">
+        <h1 style="margin: 0 auto;">EmotiSync</h1>
       </header>
+      <nav style="display: flex; justify-content: center; gap: 12px; width: 100%;">
+        <button onclick="switchScreen('home')" style="font-size: 40px;">🏠</button>
+        <button class="active" onclick="switchScreen('calendar')" style="font-size: 40px;">📅</button>
+        <button onclick="switchScreen('details')" style="font-size: 40px;">📊</button>
+        <button onclick="switchScreen('selfreport')" style="font-size: 40px;">✏️</button>
+        <button onclick="switchScreen('settings')" style="font-size: 40px;">⚙️</button>
+      </nav>
+
       <main>
-        <!-- Calendar -->
-        <section id="calendar" class="screen active">
-          <div class="card">
-            <div class="calendar-header">
-              <button id="prev-month">‹</button>
-              <div class="label" id="month-year"></div>
-              <button id="next-month">›</button>
-            </div>
-            <div class="weekdays">
-              <div>Sun</div><div>Mon</div><div>Tue</div>
-              <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
-            </div>
-            <div id="calendar-grid" class="calendar"></div>
+      <!-- Home Screen -->
+        <section id="home" class="screen active">
+          <div style="text-align: center; background: #dae0f5; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin: 0 auto;">
+            <span style="font-size: 64px; display: block; margin-bottom: 8px;">😀</span>
+            <h3 style="color: var(--primary); margin-bottom: 6px;">This day: Positive Mood</h3>
+
+          </div>
+          <div style="height: 20px;"></div>
+          <div style="text-align: center; background: #dae0f5; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin: 0 auto;">
+            <ul style="list-style: none; padding: 0; font-size: 14px; color: var(--text); text-align: left; display: inline-block;">
+              <li>❤️ Heart Rate: <strong>76 bpm</strong> (avg)</li>
+              <li>🌬️ Breathing: <strong>16 rpm</strong> (steady)</li>
+              <li>😌 Stress: <strong>Low</strong> most days</li>
+            </ul>
+          </div>
+          <div style="height: 20px;"></div>
+          <div style="text-align: center; background: #dae0f5; border-radius: var(--radius); box-shadow: var(--shadow); padding: 20px; margin: 0 auto;">
+            <span style="font-size: 64px; display: block; margin-bottom: 8px;">🧠</span>
+            <h3 style="color: var(--primary); margin-bottom: 6px;">AI Mood Patterns</h3>
+            <p style="font-size: 15px; color: var(--muted); margin-bottom: 8px;">
+              Detected pattern: Your mood tends to improve after morning walks and is most positive on weekends. Consider keeping up these habits for sustained well-being!
+            </p>
           </div>
         </section>
 
-        <!-- Choice -->
-        <section id="choice" class="screen">
-          <div class="card choice-card">
-            <h2>Select for <span id="choice-date">—</span></h2>
-            <button onclick="goToDetails()">📊</button>
-            <button onclick="goToReport()">✏️</button>
+      <section id="calendar" class="screen">
+        <div class="card">
+          <div class="calendar-header">
+            <button id="prev-month">‹</button>
+            <div class="label" id="month-year"></div>
+            <button id="next-month">›</button>
           </div>
-        </section>
-
-        <!-- Details + Weekly Summary -->
-        <section id="details" class="screen">
-          <div class="card">
-            <h2 id="details-date">—</h2>
-
-            <!-- Heart Rate Chart -->
-            <div class="chart">
-              <div class="chart-title">Heart Rate (06:00–22:00)</div>
-              <div class="chart-img">
-                <svg viewBox="0 0 300 200">
-                  <defs>
-                    <linearGradient id="gradHR" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.6"/>
-                      <stop offset="100%" stop-color="#e74c3c" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <polygon class="area-hr" points="0,150 50,120 100,130 150,100 200,110 250,80 300,90 300,200 0,200"/>
-                  <polyline class="line-hr" fill="none" stroke-width="3"
-                    points="0,150 50,120 100,130 150,100 200,110 250,80 300,90"/>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Stress Chart -->
-            <div class="chart">
-              <div class="chart-title">Stress (06:00–22:00)</div>
-              <div class="chart-img">
-                <svg viewBox="0 0 300 200">
-                  <defs>
-                    <linearGradient id="gradST" x1="0%" y1="0%" x2="0%" y2="100%">
-                      <stop offset="0%" stop-color="#f1c40f" stop-opacity="0.6"/>
-                      <stop offset="100%" stop-color="#f1c40f" stop-opacity="0"/>
-                    </linearGradient>
-                  </defs>
-                  <polygon class="area-st" points="0,100 50,110 100,90 150,95 200,80 250,85 300,75 300,200 0,200"/>
-                  <polyline class="line-st" fill="none" stroke-width="3"
-                    points="0,100 50,110 100,90 150,95 200,80 250,85 300,75"/>
-                </svg>
-              </div>
-            </div>
-
-            <!-- Weekly Summary Table -->
-            <table class="summary">
-              <thead>
-                <tr><th>Emotion</th><th>Count (last 7 days)</th></tr>
-              </thead>
-              <tbody>
-                <tr><td>😀</td><td>3</td></tr>
-                <tr><td>🙂</td><td>2</td></tr>
-                <tr><td>😐</td><td>1</td></tr>
-                <tr><td>😔</td><td>1</td></tr>
-                <tr><td>😢</td><td>0</td></tr>
-              </tbody>
-            </table>
-
-            <p><strong>Inferred:</strong> <span id="inferred-emoji">😀</span></p>
-            <p><strong>Self:</strong>    <span id="self-emoji">—</span></p>
-            <p><strong>Notes:</strong>   <span id="self-text">—</span></p>
+          <div class="weekdays">
+            <div>Sun</div><div>Mon</div><div>Tue</div>
+            <div>Wed</div><div>Thu</div><div>Fri</div><div>Sat</div>
           </div>
-        </section>
+          <div id="calendar-grid" class="calendar"></div>
+        </div>
+      </section>
 
-        <!-- Self-Report -->
-        <section id="selfreport" class="screen">
-          <div class="card">
-            <h2>Report <span id="report-date">—</span></h2>
-            <div class="emoji-options" id="report-emojis">
-              <span>😃</span><span>🙂</span><span>😐</span>
-              <span>😔</span><span>😢</span>
-            </div>
-            <textarea id="report-text" rows="3" placeholder="Your notes..."></textarea>
-            <button class="save-btn" onclick="submitReport()">Save</button>
-          </div>
-        </section>
+      <!-- Choice -->
+      <section id="choice" class="screen">
+        <div class="card choice-card">
+          <h2>Select for <span id="choice-date">—</span></h2>
+          <button onclick="goToDetails()">📊</button>
+          <button onclick="goToReport()">✏️</button>
+        </div>
+      </section>
 
-        <!-- Notifications & Privacy -->
-        <section id="settings" class="screen">
-          <div class="card">
-            <h2>Notifications &amp; Privacy</h2>
-            <div class="settings-item">
-              <label><span class="icon">🔄</span>
-                <input type="radio" name="alert" value="multiple" checked>
-                Multiple updates per day
-              </label>
-              <label><span class="icon">📆</span>
-                <input type="radio" name="alert" value="daily">
-                Update once a day
-              </label>
-              <label><span class="icon">⚠️</span>
-                <input type="radio" name="alert" value="significant">
-                Update if anything significant
-              </label>
+      <!-- Details + Weekly Summary -->
+      <section id="details" class="screen">
+        <div class="card">
+          <h2 id="details-date">—</h2>
+
+          <!-- Heart Rate Chart -->
+          <div class="chart">
+            <div class="chart-title">Heart Rate (06:00–22:00)</div>
+            <div class="chart-img">
+              <svg viewBox="0 0 300 200">
+                <defs>
+                  <linearGradient id="gradHR" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#e74c3c" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#e74c3c" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <polygon class="area-hr" points="0,150 50,120 100,130 150,100 200,110 250,80 300,90 300,200 0,200"/>
+                <polyline class="line-hr" fill="none" stroke-width="3"
+                  points="0,150 50,120 100,130 150,100 200,110 250,80 300,90"/>
+              </svg>
             </div>
-            <div class="settings-item">
-              <label><span class="icon">🔒</span>
-                <input type="checkbox" id="pin-lock">
-                Enable PIN lock
-              </label>
-            </div>
-            <div class="settings-item">
-              <label><span class="icon">💾</span>
-                <input type="checkbox" id="local-storage" checked disabled>
-                Store data locally (encrypted)
-              </label>
-            </div>
-            <button class="save-btn" onclick="saveSettings()">Save Settings</button>
           </div>
-        </section>
+
+          <!-- Stress Chart -->
+          <div class="chart">
+            <div class="chart-title">Stress (06:00–22:00)</div>
+            <div class="chart-img">
+              <svg viewBox="0 0 300 200">
+                <defs>
+                  <linearGradient id="gradST" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#f1c40f" stop-opacity="0.6"/>
+                    <stop offset="100%" stop-color="#f1c40f" stop-opacity="0"/>
+                  </linearGradient>
+                </defs>
+                <polygon class="area-st" points="0,100 50,110 100,90 150,95 200,80 250,85 300,75 300,200 0,200"/>
+                <polyline class="line-st" fill="none" stroke-width="3"
+                  points="0,100 50,110 100,90 150,95 200,80 250,85 300,75"/>
+              </svg>
+            </div>
+          </div>
+
+          <!-- Weekly Summary Table -->
+          <table class="summary">
+            <thead>
+              <tr><th>Emotion</th><th>Count (last 7 days)</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>😀</td><td>3</td></tr>
+              <tr><td>🙂</td><td>2</td></tr>
+              <tr><td>😐</td><td>1</td></tr>
+              <tr><td>😔</td><td>1</td></tr>
+              <tr><td>😢</td><td>0</td></tr>
+            </tbody>
+          </table>
+
+          <p><strong>Inferred:</strong> <span id="inferred-emoji">😀</span></p>
+          <p><strong>Self:</strong>    <span id="self-emoji">—</span></p>
+          <p><strong>Notes:</strong>   <span id="self-text">—</span></p>
+        </div>
+      </section>
+
+      <!-- Self-Report -->
+      <section id="selfreport" class="screen">
+        <div class="card">
+          <h2>Report <span id="report-date">—</span></h2>
+          <div class="emoji-options" id="report-emojis">
+            <span>😃</span><span>🙂</span><span>😐</span>
+            <span>😔</span><span>😢</span>
+          </div>
+          <textarea id="report-text" rows="3" placeholder="Your notes..."></textarea>
+          <button class="save-btn" onclick="submitReport()">Save</button>
+        </div>
+      </section>
+
+      <!-- Notifications & Privacy -->
+      <section id="settings" class="screen">
+        <div class="card">
+          <h2>Notifications &amp; Privacy</h2>
+          <div class="settings-item">
+            <label><span class="icon">🔄</span>
+              <input type="radio" name="alert" value="multiple" checked>
+              Multiple updates per day
+            </label>
+            <label><span class="icon">📆</span>
+              <input type="radio" name="alert" value="daily">
+              Update once a day
+            </label>
+            <label><span class="icon">⚠️</span>
+              <input type="radio" name="alert" value="significant">
+              Update if anything significant
+            </label>
+          </div>
+          <div class="settings-item">
+            <label><span class="icon">🔒</span>
+              <input type="checkbox" id="pin-lock">
+              Enable PIN lock
+            </label>
+          </div>
+          <div class="settings-item">
+            <label><span class="icon">💾</span>
+              <input type="checkbox" id="local-storage" checked disabled>
+              Store data locally (encrypted)
+            </label>
+          </div>
+          <button class="save-btn" onclick="saveSettings()">Save Settings</button>
+        </div>
+      </section>
       </main>
       <footer>
         🔒 Your emotion data is strictly confidential and encrypted on your device. 
         <a href="#">Learn more</a>.
       </footer>
     </div>
-
   </div>
 
   <script>
