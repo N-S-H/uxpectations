@@ -291,13 +291,64 @@
       <header style="justify-content: center; display: flex; align-items: center;">
         <h1 style="margin: 0 auto;">EmotiSync</h1>
       </header>
-      <nav style="display: flex; justify-content: center; gap: 12px; width: 100%;">
-        <button onclick="switchScreen('home')" style="font-size: 40px;">🏠</button>
-        <button class="active" onclick="switchScreen('calendar')" style="font-size: 40px;">📅</button>
-        <button onclick="switchScreen('details')" style="font-size: 40px;">📊</button>
-        <button onclick="switchScreen('selfreport')" style="font-size: 40px;">✏️</button>
-        <button onclick="switchScreen('settings')" style="font-size: 40px;">⚙️</button>
+      <nav style="display: flex; justify-content: center; gap: 4px; width: 100%; margin-top: 8px;">
+        <button class="nav-btn" onclick="switchScreen('home')" title="Home">
+          <span class="nav-icon">🏠</span>
+          <span class="nav-label">Home</span>
+        </button>
+        <button class="nav-btn active" onclick="switchScreen('calendar')" title="Calendar">
+          <span class="nav-icon">📅</span>
+          <span class="nav-label">Calendar</span>
+        </button>
+        <button class="nav-btn" onclick="switchScreen('details')" title="Details">
+          <span class="nav-icon">📊</span>
+          <span class="nav-label">Details</span>
+        </button>
+        <button class="nav-btn" onclick="switchScreen('selfreport')" title="Report">
+          <span class="nav-icon">✏️</span>
+          <span class="nav-label">Report</span>
+        </button>
+        <button class="nav-btn" onclick="switchScreen('settings')" title="Settings">
+          <span class="nav-icon">⚙️</span>
+          <span class="nav-label">Settings</span>
+        </button>
       </nav>
+      <style>
+        .nav-btn {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          background: linear-gradient(135deg, #4a90e2 70%, #357ab8 100%);
+          color: #fff;
+          border: none;
+          border-radius: 16px;
+          box-shadow: 0 2px 8px rgba(74,144,226,0.12);
+          padding: 10px 14px;
+          font-size: 14px;
+          cursor: pointer;
+          transition: background 0.2s, transform 0.15s, box-shadow 0.2s;
+          min-width: 48px;
+        }
+        .nav-btn .nav-icon {
+          font-size: 22px;
+          margin-bottom: 2px;
+          transition: transform 0.2s;
+        }
+        .nav-btn .nav-label {
+          font-size: 10px;
+          font-weight: 500;
+          letter-spacing: 0.02em;
+          opacity: 0.85;
+        }
+        .nav-btn:hover, .nav-btn.active {
+          background: linear-gradient(135deg, #357ab8 70%, #4a90e2 100%);
+          transform: translateY(-2px) scale(1.05);
+          box-shadow: 0 4px 16px rgba(74,144,226,0.18);
+        }
+        .nav-btn.active .nav-icon {
+          transform: scale(1.2);
+        }
+      </style>
 
       <main>
       <!-- Home Screen -->
