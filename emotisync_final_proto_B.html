@@ -269,21 +269,53 @@
     <div class="watch-container">
       <div class="watch-datetime">Tuesday, Jul 8</div>
       <div class="watch-time">09:42 AM</div>
-      <div class="metric heart">
-        <div class="label">Heart Rate</div>
-        <div class="icon">❤️</div>
-        <div class="value">76 bpm</div>
+      <section style="margin: 16px; width: 100%; height: 100%; text-align: center; border: 3px solid #2ecc40; border-radius: 16px;" id="watch-section-1">
+        <div style="font-size: 48px; margin-top: 10px; margin-bottom: 4px;">😀</div>
+        <div style="font-size: 13px; color: #ccc;">Perceived Mood</div>
+      </section>
+      <section style="display: none; margin: 16px; text-align: center;" id="watch-section-2">
+        <div class="metric heart">
+          <span class="icon">❤️</span>
+          <span style="margin-left: 8px;"class="value">76 bpm</span>
+        </div>
+        <div class="metric breath">
+          <span class="icon">🌬️</span>
+          <span style="margin-left: 8px;"class="value">16 rpm</span>
+        </div>
+        <div class="metric stress">
+          <span class="icon">😌</span>
+          <span style="margin-left: 8px;" class="value">Low</span>
+        </div>
+        <div class="metric" style="margin-top:8px;">
+          <span class="icon" style="color:#8e44ad;">🩸</span>
+          <span class="value" style="margin-left:4px;">120/80</span>
+        </div>
+      </section>
+      <div style="margin-top: auto; width: 100%; display: flex; justify-content: space-between; align-items: center;">
+        <button style="background: #222; color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 22px; cursor: pointer;">&#60;</button>
+        <button style="background: #222; color: #fff; border: none; border-radius: 50%; width: 36px; height: 36px; font-size: 22px; cursor: pointer;">&#62;</button>
       </div>
-      <div class="metric breath">
-        <div class="label">Breathing</div>
-        <div class="icon">🌬️</div>
-        <div class="value">16 rpm</div>
-      </div>
-      <div class="metric stress">
-        <div class="label">Stress</div>
-        <div class="icon">😌</div>
-        <div class="value">Low</div>
-      </div>
+      <script>
+        // Ensure buttons exist before querying
+        document.addEventListener('DOMContentLoaded', function() {
+          const leftBtn = document.querySelector('.watch-container button:first-child');
+          const rightBtn = document.querySelector('.watch-container button:last-child');
+          const section1 = document.getElementById('watch-section-1');
+          const section2 = document.getElementById('watch-section-2');
+          let watchSectionIndex = 0;
+          rightBtn.onclick = function() {
+            section1.style.display = 'none';
+            section2.style.display = '';
+            watchSectionIndex = 1;
+          };
+          leftBtn.onclick = function() {
+            section1.style.display = '';
+            section2.style.display = 'none';
+            watchSectionIndex = 0;
+          };
+        });
+      </script>
+
     </div>
 
     <!-- MOBILE APP -->
